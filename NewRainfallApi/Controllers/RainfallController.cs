@@ -8,6 +8,7 @@ namespace NewRainfallApi.Controllers
     [ApiController]
     public class RainfallController : ControllerBase
     {
+
         private readonly HttpClient _httpClient;
 
         public ErrorResponse ErrorResponse { get; set; } = null!;
@@ -19,6 +20,10 @@ namespace NewRainfallApi.Controllers
         }
 
         [HttpGet("id/{stationId}/readings")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> GetRainfallReadings(string stationId, int count = 10)
         {
             if (count < 1 || count > 100)
@@ -50,7 +55,7 @@ namespace NewRainfallApi.Controllers
                     {
                         Errors = new List<Error>
                         {
-                            new Error { Message = "Base address/endpoint is incorrect." }
+                            new Error { Message = "Base address or endpoint is incorrect." }
                         }
                     };
                     return BadRequest(ErrorResponse);
@@ -87,6 +92,7 @@ namespace NewRainfallApi.Controllers
                         new Error { Message = "Internal server error." }
                     }
                 };
+
                 return StatusCode(500, ErrorResponse);
             }
         }
