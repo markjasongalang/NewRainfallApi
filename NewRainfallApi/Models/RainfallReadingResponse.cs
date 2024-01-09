@@ -5,6 +5,6 @@ namespace NewRainfallApi.Models
     public class RainfallReadingResponse
     {
         [JsonPropertyName("items")]
-        public List<RainfallReading> Items { get; set; } = null!;
+        public List<RainfallReading> Readings { get; set; } = null!;
     }
 }
