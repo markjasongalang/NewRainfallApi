@@ -19,9 +19,14 @@ namespace NewRainfallApi.Controllers
         [HttpGet("id/{stationId}/readings")]
         public async Task<IActionResult> GetRainfallReadings(string stationId, int count = 10)
         {
+            var request = new HttpRequestMessage(HttpMethod.Get, $"{_httpClient.BaseAddress}/id/stations/{stationId}/readings?_limit={count}");
             
+            var response = await _httpClient.SendAsync(request);
+            response.EnsureSuccessStatusCode();
 
-            return Ok();
+            var rainfallReadingResponse = await JsonSerializer.DeserializeAsync<RainfallReadingResponse>(await response.Content.ReadAsStreamAsync());
+
+            return Ok(rainfallReadingResponse.Items);
         }
     }
 }
